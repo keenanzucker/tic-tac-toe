@@ -10,7 +10,7 @@
 	position: absolute;
 	width: 50%;
 	height: 90%;
-	opacity: 0.95;
+	opacity: 0.9;
 	top: 20px;
 	left: 25%;
 	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
@@ -19,8 +19,13 @@
 }
 
 .title-text {
-	font-size: 100px;
-	font-style: bold;
+	font-size: 4vw;
+	font-weight: 900;
+	font-family: Roboto, sans-serif;
+}
+
+.sub-text {
+	font-size: 3vw;
 }
 
 .player-button {
@@ -31,4 +36,13 @@
 	border: solid 2px black;
 	width: 60%;
 	text-align: center;
+	transition: background-color 0.3s ease;
+}
+
+.one:hover {
+	background-color: #BBDEFB;
+}
+
+.two:hover {
+	background-color: #F0F4C3;
 }

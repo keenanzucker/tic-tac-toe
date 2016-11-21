@@ -250,7 +250,6 @@ class App extends Component {
         />
         <Scoreboard winner={this.state.winner}/>
         <div className="menu">
-          <h1 className="title">Tic Tac Toe </h1>
           <ResetButton reset={this.resetBoard.bind(this)} />
         </div>
 
