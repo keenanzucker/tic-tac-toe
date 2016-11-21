@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Scoreboard from './components/Scoreboard.js';
 import ResetButton from './components/ResetButton.js'
 import Tile from './components/Tile.js';
+import LandingPage from './components/LandingPage.js';
 import './App.css';
 
 class App extends Component {
@@ -15,8 +16,17 @@ class App extends Component {
       ' ', ' ', ' '
       ],
       turn: 'x',
-      winner: null
+      winner: null,
+      numPlayers: 0
     }
+  }
+
+  onePlayer() {
+    this.setState({numPlayers: 1});
+  }
+
+  twoPlayer() {
+    this.setState({numPlayers: 2});
   }
 
   updateBoard(loc) {
@@ -72,13 +82,19 @@ class App extends Component {
       ' ', ' ', ' '
       ],
       turn: 'x',
-      winner: null
+      winner: null,
+      numPlayers: 0
     })
   }
 
   render() {
     return (
       <div className="container">
+        <LandingPage
+          onePlayer={this.onePlayer.bind(this)}
+          twoPlayer={this.twoPlayer.bind(this)}
+          numPlayers={this.state.numPlayers}
+        />
         <Scoreboard winner={this.state.winner}/>
         <div className="menu">
           <h1 className="title">Tic Tac Toe </h1>
