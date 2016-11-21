@@ -204,7 +204,7 @@ class App extends Component {
     });
   }
 
-  updateBoard(loc) {
+  updateBoardTwoPlayer(loc) {
     if (this.state.gameBoard[loc] === 'x' || this.state.gameBoard[loc] === 'o' || this.state.winner) {
       // If they click a tile that already exists or game is over
       return;
@@ -261,7 +261,7 @@ class App extends Component {
                 key={i}
                 loc={i}
                 value={value}
-                gameLoop={this.gameLoop.bind(this)}
+                gameLoop={(this.state.numPlayers === 1) ? this.gameLoop.bind(this) : this.updateBoardTwoPlayer.bind(this)}
               />
             )
           }.bind(this))}
