@@ -5,7 +5,7 @@ import '../stylesheets/Tile.css';
 class Tile extends Component {
 
   tileClick(props) {
-    props.updateBoard(props.loc);
+    props.gameLoop(props.loc, props.turn);
   }
 
   render() {
