@@ -7,6 +7,7 @@ import './App.css';
 
 class App extends Component {
 
+  // Set up state
   constructor(props) {
     super(props);
     this.state = {
@@ -46,6 +47,7 @@ class App extends Component {
     return board.slice(0);
   }
 
+  // Checks if the game has been won by either player
   winner(board, player){
     if (
           (board[0] === player && board[1] === player && board[2] === player) ||
@@ -63,6 +65,7 @@ class App extends Component {
       }
   }
 
+  // Checks if game is a tie
   tie(board) {
     let moves = board.join('').replace(/ /g, '');
     if (moves.length === 9) {
@@ -71,34 +74,7 @@ class App extends Component {
     return false;
   }
 
-  // checkWinner(board) {
-  //   // creat an array of win states
-  //   let winStates = [];
-
-  //   winStates.push(board[0] + board[1] + board[2]);
-  //   winStates.push(board[3] + board[4] + board[5]);
-  //   winStates.push(board[6] + board[7] + board[8]);
-  //   winStates.push(board[0] + board[3] + board[6]);
-  //   winStates.push(board[1] + board[4] + board[7]);
-  //   winStates.push(board[2] + board[5] + board[8]);
-  //   winStates.push(board[0] + board[4] + board[8]);
-  //   winStates.push(board[2] + board[4] + board[6]);
-
-  //   // check all of win states
-  //   for (let i = 0; i < winStates.length; i++) {
-  //     if (winStates[i].match(/xxx|ooo/)) {
-  //       this.setState({winner: this.state.turn});
-  //       return;
-  //     }
-  //   }
-
-  //   // check if the game is a draw
-  //   let moves = this.state.gameBoard.join('').replace(/ /g, '');
-  //   if (moves.length === 9) {
-  //     this.setState({winner: 'd'});
-  //   }
-  // }
-
+  // Checks for valid move and then adds move to gameboard
   validMove(move, player, board) {
     let newBoard = this.copyBoard(board);
     if (newBoard[move] === ' ') {
@@ -109,6 +85,7 @@ class App extends Component {
     }
   }
 
+  // Smart AI will use Minimax algorithm to evaluate game states and never lose.
   findAiMoveHard(board) {
     let bestMoveScore = 100;
     let move = null;
@@ -131,6 +108,7 @@ class App extends Component {
     return move;
   }
 
+  // Dumb AI will just choose random tile that is not filled to move next
   findAiMoveEasy(board) {
     let possibleMoves = [];
     for (let i = 0; i < board.length; i++) {
@@ -141,6 +119,7 @@ class App extends Component {
     return possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
   }
 
+  // Min Score function of the minimax algorithm - rewards 10 for win, -10 for loss, 0 for tie
   minScore(board) {
     if (this.winner(board, 'x')) {
       return 10;
@@ -163,6 +142,7 @@ class App extends Component {
     }
   }
 
+  // Max Score function of the minimax algorithm - rewards 10 for win, -10 for loss, 0 for tie
   maxScore(board) {
     if (this.winner(board, 'x')) {
       return 10;
@@ -185,9 +165,13 @@ class App extends Component {
     }
   }
 
+  // Game flow if a game with AI is selected
   gameLoopAI(move) {
     let player = this.state.turn;
     let curGameBoard = this.validMove(move, player, this.state.gameBoard);
+
+    // Show the user's move
+    this.setState({gameBoard: curGameBoard});
 
     if (this.winner(curGameBoard, player)) {
       this.setState({
@@ -204,6 +188,7 @@ class App extends Component {
       return;
     }
 
+    // switch to the AI turn
     player = 'o';
 
     // if easy game, use ai easy function, if not, use ai hard function
@@ -222,14 +207,20 @@ class App extends Component {
       });
       return;
     }
-    this.setState({
-      gameBoard: curGameBoard
-    });
+
+    // Add a small delay to make it easier for user to understand game, AI move
+    setTimeout(() => {
+      this.setState({
+        gameBoard: curGameBoard
+      });
+    }, 300);
   }
 
+  // Game flow if a two player game is selected
   updateBoardTwoPlayer(loc) {
+
+    // If they click a tile that already exists or game is over
     if (this.state.gameBoard[loc] === 'x' || this.state.gameBoard[loc] === 'o' || this.state.winner) {
-      // If they click a tile that already exists or game is over
       return;
     }
 
@@ -240,7 +231,6 @@ class App extends Component {
 
     // update state to current game board
     this.setState({gameBoard: curGameBoard});
-
 
     if (this.winner(curGameBoard, this.state.turn)) {
       this.setState({
@@ -257,8 +247,8 @@ class App extends Component {
     this.setState({turn: (this.state.turn === 'x') ? 'o' : 'x'});
   }
 
+  // Set the board back to the original settings
   resetBoard() {
-    // Set the board back to the original settings
     this.setState({
       gameBoard: [
       ' ', ' ', ' ',
