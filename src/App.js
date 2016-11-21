@@ -18,13 +18,24 @@ class App extends Component {
       turn: 'x',
       winner: null,
       numPlayers: 0,
+      difficulty: null,
       maxPlayer: 'x',
       minPlayer: 'o'
     }
   }
 
-  onePlayer() {
-    this.setState({numPlayers: 1});
+  onePlayerEasy() {
+    this.setState({
+      numPlayers: 1,
+      difficulty: 'easy'
+    });
+  }
+
+  onePlayerHard() {
+    this.setState({
+      numPlayers: 1,
+      difficulty: 'hard'
+    });
   }
 
   twoPlayer() {
@@ -60,33 +71,33 @@ class App extends Component {
     return false;
   }
 
-  checkWinner(board) {
-    // creat an array of win states
-    let winStates = [];
+  // checkWinner(board) {
+  //   // creat an array of win states
+  //   let winStates = [];
 
-    winStates.push(board[0] + board[1] + board[2]);
-    winStates.push(board[3] + board[4] + board[5]);
-    winStates.push(board[6] + board[7] + board[8]);
-    winStates.push(board[0] + board[3] + board[6]);
-    winStates.push(board[1] + board[4] + board[7]);
-    winStates.push(board[2] + board[5] + board[8]);
-    winStates.push(board[0] + board[4] + board[8]);
-    winStates.push(board[2] + board[4] + board[6]);
+  //   winStates.push(board[0] + board[1] + board[2]);
+  //   winStates.push(board[3] + board[4] + board[5]);
+  //   winStates.push(board[6] + board[7] + board[8]);
+  //   winStates.push(board[0] + board[3] + board[6]);
+  //   winStates.push(board[1] + board[4] + board[7]);
+  //   winStates.push(board[2] + board[5] + board[8]);
+  //   winStates.push(board[0] + board[4] + board[8]);
+  //   winStates.push(board[2] + board[4] + board[6]);
 
-    // check all of win states
-    for (let i = 0; i < winStates.length; i++) {
-      if (winStates[i].match(/xxx|ooo/)) {
-        this.setState({winner: this.state.turn});
-        return;
-      }
-    }
+  //   // check all of win states
+  //   for (let i = 0; i < winStates.length; i++) {
+  //     if (winStates[i].match(/xxx|ooo/)) {
+  //       this.setState({winner: this.state.turn});
+  //       return;
+  //     }
+  //   }
 
-    // check if the game is a draw
-    let moves = this.state.gameBoard.join('').replace(/ /g, '');
-    if (moves.length === 9) {
-      this.setState({winner: 'd'});
-    }
-  }
+  //   // check if the game is a draw
+  //   let moves = this.state.gameBoard.join('').replace(/ /g, '');
+  //   if (moves.length === 9) {
+  //     this.setState({winner: 'd'});
+  //   }
+  // }
 
   validMove(move, player, board) {
     let newBoard = this.copyBoard(board);
@@ -98,7 +109,7 @@ class App extends Component {
     }
   }
 
-  findAiMove(board) {
+  findAiMoveHard(board) {
     let bestMoveScore = 100;
     let move = null;
 
@@ -118,6 +129,16 @@ class App extends Component {
       }
     }
     return move;
+  }
+
+  findAiMoveEasy(board) {
+    let possibleMoves = [];
+    for (let i = 0; i < board.length; i++) {
+      if (board[i] === ' ') {
+        possibleMoves.push(i);
+      }
+    }
+    return possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
   }
 
   minScore(board) {
@@ -164,7 +185,7 @@ class App extends Component {
     }
   }
 
-  gameLoop(move) {
+  gameLoopAI(move) {
     let player = this.state.turn;
     let curGameBoard = this.validMove(move, player, this.state.gameBoard);
 
@@ -184,7 +205,9 @@ class App extends Component {
     }
 
     player = 'o';
-    curGameBoard = this.validMove(this.findAiMove(curGameBoard), player, curGameBoard);
+
+    // if easy game, use ai easy function, if not, use ai hard function
+    curGameBoard = this.validMove(((this.state.difficulty === 'easy') ? this.findAiMoveEasy(curGameBoard) : this.findAiMoveHard(curGameBoard)), player, curGameBoard);
     if (this.winner(curGameBoard, player)) {
       this.setState({
         gameBoard: curGameBoard,
@@ -218,7 +241,17 @@ class App extends Component {
     // update state to current game board
     this.setState({gameBoard: curGameBoard});
 
-    this.checkWinner(curGameBoard);
+
+    if (this.winner(curGameBoard, this.state.turn)) {
+      this.setState({
+        winner: this.state.turn
+      });
+    }
+    if (this.tie(curGameBoard)) {
+      this.setState({
+        winner: 'd'
+      });
+    }
 
     // change the player's turn
     this.setState({turn: (this.state.turn === 'x') ? 'o' : 'x'});
@@ -244,7 +277,8 @@ class App extends Component {
     return (
       <div className="container">
         <LandingPage
-          onePlayer={this.onePlayer.bind(this)}
+          onePlayerEasy={this.onePlayerEasy.bind(this)}
+          onePlayerHard={this.onePlayerHard.bind(this)}
           twoPlayer={this.twoPlayer.bind(this)}
           numPlayers={this.state.numPlayers}
         />
@@ -260,7 +294,7 @@ class App extends Component {
                 key={i}
                 loc={i}
                 value={value}
-                gameLoop={(this.state.numPlayers === 1) ? this.gameLoop.bind(this) : this.updateBoardTwoPlayer.bind(this)}
+                gameLoop={(this.state.numPlayers === 1) ? this.gameLoopAI.bind(this) : this.updateBoardTwoPlayer.bind(this)}
               />
             )
           }.bind(this))}
@@ -268,37 +302,6 @@ class App extends Component {
       </div>
     );
   }
-
-  // render() {
-  //   return (
-  //     <div className="container">
-  //       <LandingPage
-  //         onePlayer={this.onePlayer.bind(this)}
-  //         twoPlayer={this.twoPlayer.bind(this)}
-  //         numPlayers={this.state.numPlayers}
-  //       />
-  //       <Scoreboard winner={this.state.winner}/>
-  //       <div className="menu">
-  //         <h1 className="title">Tic Tac Toe </h1>
-  //         <ResetButton reset={this.resetBoard.bind(this)} />
-  //       </div>
-
-  //       <div className="game-board container">
-  //         {this.state.gameBoard.map(function(value, i) {
-  //           return (
-  //             <Tile
-  //               key={i}
-  //               loc={i}
-  //               value={value}
-  //               updateBoard={this.updateBoard.bind(this)}
-  //               turn={this.state.turn}
-  //             />
-  //           )
-  //         }.bind(this))}
-  //       </div>
-  //     </div>
-  //   );
-  // }
 }
 
 export default App;

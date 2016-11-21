@@ -39,10 +39,14 @@
 	transition: background-color 0.3s ease;
 }
 
-.one:hover {
-	background-color: #BBDEFB;
+.one-easy:hover {
+	background-color: #C5E1A5;
+}
+
+.one-hard:hover {
+	background-color: #EF5350;
 }
 
 .two:hover {
-	background-color: #F0F4C3;
+	background-color: #90CAF9;
 }
