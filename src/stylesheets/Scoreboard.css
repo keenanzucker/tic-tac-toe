@@ -1,0 +1,29 @@
+.hidden {
+	display: none;
+}
+
+.visible {
+	background-color: #F5F5F5;
+	border-radius: 5px;
+	text-align: center;
+	margin: 0 auto;
+	position: absolute;
+	width: 50%;
+	opacity: 0.9;
+	top: 100px;
+	left: 25%;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	z-index: 1000;
+}
+
+.visible > h2 {
+	font-size: 64px;
+	font-family: Century Gothic, sans-serif;
+	opacity: 1;
+	padding: 20px;
+}
+
+.title {
+	font-size: 42px;
+	font-family: Century Gothic, sans-serif;
+}

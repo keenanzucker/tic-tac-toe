@@ -5,13 +5,13 @@ import '../stylesheets/Tile.css';
 class Tile extends Component {
 
   tileClick(props) {
-    props.updateBoard(props.loc, props.turn);
+    props.updateBoard(props.loc);
   }
 
   render() {
     return (
       <div className={"tile " + this.props.loc} onClick={() => this.tileClick(this.props)}>
-        <p> {this.props.value}</p>
+        <p className={"animated infinite pulse " + this.props.value}> {this.props.value} </p>
       </div>
     );
   }
