@@ -11,6 +11,7 @@ I developed this game as a coding challenge for an internship at Zendesk. You ca
 
 - copy the link from the clone option in the repository on the github page [here](https://github.com/keenanzucker/tic-tac-toe)
 - navigate to your desired folder and run ```git clone <link-copied-from-github>```
+- run ```cd tic-tac-toe```
 - run ```npm install ``` to download the necessary packages
 - run ```npm start``` to run it locally. It should automatically open a new browser tab but if not, navigate to ```http://localhost:3000/```in your browser
 

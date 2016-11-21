@@ -213,7 +213,7 @@ class App extends Component {
       this.setState({
         gameBoard: curGameBoard
       });
-    }, 300);
+    }, 200);
   }
 
   // Game flow if a two player game is selected
