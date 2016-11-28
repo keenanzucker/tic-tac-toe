@@ -236,11 +236,13 @@ class App extends Component {
       this.setState({
         winner: this.state.turn
       });
+      return;
     }
-    if (this.tie(curGameBoard)) {
+    else if (this.tie(curGameBoard)) {
       this.setState({
         winner: 'd'
       });
+      return;
     }
 
     // change the player's turn
