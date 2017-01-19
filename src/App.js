@@ -171,7 +171,9 @@ class App extends Component {
     let curGameBoard = this.validMove(move, player, this.state.gameBoard);
 
     // Show the user's move
-    this.setState({gameBoard: curGameBoard});
+    if (curGameBoard) {
+      this.setState({gameBoard: curGameBoard});
+    }
 
     if (this.winner(curGameBoard, player)) {
       this.setState({
